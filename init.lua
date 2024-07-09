@@ -71,7 +71,7 @@ Kickstart Guide:
     plugins or Neovim features used in Kickstart.
 
    NOTE: Look for lines like this
-
+  
     Throughout the file. These are for you, the reader, to help you understand what is happening.
     Feel free to delete them once you know what you're doing, but they should serve as a guide
     for when you are first encountering a few different constructs in your Neovim config.
@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -113,7 +113,17 @@ vim.opt.showmode = false
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.opt.clipboard = 'unnamedplus'
+vim.g.clipboard = {
+  name = 'OSC 52',
+  copy = {
+    ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+    ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+  },
+  paste = {
+    ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+    ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+  },
+}
 
 -- Enable break indent
 vim.opt.breakindent = true
@@ -181,17 +191,41 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 -- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
 -- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
--- Keybinds to make split navigation easier.
+-- Keybindings to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+vim.keymap.set('n', '<leader>sl', ':vsp<enter>', {desc = 'Split to the right and move focus'})
+vim.keymap.set('n', '<leader>sh', ':vsp<enter><C-w>h', {desc = 'Split to the left and move focus'})
+vim.keymap.set('n', '<leader>sk', ':sp<C-w>k<enter>', {desc = 'Split upwards and move focus'})
+vim.keymap.set('n', '<leader>sj', ':sp<enter>', {desc = 'Split to the bottom and move focus'})
+
+vim.keymap.set('n', '<leader>tl', ':vsp<enter>:term<enter>a', {desc = 'Term to the right and move focus'})
+vim.keymap.set('n', '<leader>th', ':vsp<enter><C-w>h:term<enter>a', {desc = 'Term to the left and move focus'})
+vim.keymap.set('n', '<leader>tk', ':sp<C-w>k<enter>:term<enter>a', {desc = 'Term upwards and move focus'})
+vim.keymap.set('n', '<leader>tj', ':sp<enter>:term<enter>a', {desc = 'Term to the bottom and move focus'})
+
+vim.keymap.set('n', '<leader>wl',  '<C-w>l', {desc = 'Split to the right'})
+vim.keymap.set('n', '<leader>wh',  '<C-w>h', {desc = 'Split to the left'})
+vim.keymap.set('n', '<leader>wk',  '<C-w>k', {desc = 'Split to the top'})
+vim.keymap.set('n', '<leader>wj',  '<C-w>j', {desc = 'Split to the bottom'})
+
+vim.keymap.set('n', '<leader>q', ':q<enter>', {desc = 'Quit the current window'})
+
+-- Keymaps for navigating files
+vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, {desc = 'Open file picker'})
+vim.keymap.set('n', '<leader>fw', ":w<enter>", {desc = 'Save the current file'})
+
+-- Keymaps for using git
+vim.keymap.set('n', '<leader>gc', require('telescope.builtin').git_commits, {desc = 'show the git commit history'})
+vim.keymap.set('n', '<leader>gbc', require('telescope.builtin').git_bcommits, {desc = 'show the git commit history for the current file'})
+vim.keymap.set('n', '<leader>ss', require('telescope.builtin').git_status, {desc = 'show the current git [s]tatu[s]'})
+vim.keymap.set('n', '<leader>sh', require('telescope.builtin').git_stash, {desc = 'show the current git stash'})
+
 
 -- [[ Basic Autocommands ]]
---  See `:help lua-guide-autocommands`
+--  See `:help lua-guide-autocommands
 
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
@@ -286,7 +320,6 @@ require('lazy').setup({
         ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
         ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
         ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-        ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
         ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
       }
       -- visual mode
@@ -372,16 +405,6 @@ require('lazy').setup({
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
-      vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-      vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-      vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
-      vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-      vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-      vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-      vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
-      vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -567,8 +590,10 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
+        pyright = {},
+        rust_analyzer = {
+          cmd = {"~/.toolbox/bin/rust-analyzer"}
+        },
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -729,7 +754,7 @@ require('lazy').setup({
           -- Accept ([y]es) the completion.
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
-          ['<C-y>'] = cmp.mapping.confirm { select = true },
+          ['<Tab>'] = cmp.mapping.confirm { select = true },
 
           -- If you prefer more traditional completion keymaps,
           -- you can uncomment the following lines
@@ -778,17 +803,20 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
+    'varun-ramani/duokai.nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     init = function()
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'duokai'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
     end,
+    dependencies = {
+      'rktjmp/lush.nvim'
+    }
   },
 
   -- Highlight todo, notes, etc in comments
