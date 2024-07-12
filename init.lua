@@ -191,39 +191,6 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 -- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
 -- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
--- Keybindings to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
---
---  See `:help wincmd` for a list of all window commands
-
-vim.keymap.set('n', '<leader>sl', ':vsp<enter>', {desc = 'Split to the right and move focus'})
-vim.keymap.set('n', '<leader>sh', ':vsp<enter><C-w>h', {desc = 'Split to the left and move focus'})
-vim.keymap.set('n', '<leader>sk', ':sp<C-w>k<enter>', {desc = 'Split upwards and move focus'})
-vim.keymap.set('n', '<leader>sj', ':sp<enter>', {desc = 'Split to the bottom and move focus'})
-
-vim.keymap.set('n', '<leader>tl', ':vsp<enter>:term<enter>a', {desc = 'Term to the right and move focus'})
-vim.keymap.set('n', '<leader>th', ':vsp<enter><C-w>h:term<enter>a', {desc = 'Term to the left and move focus'})
-vim.keymap.set('n', '<leader>tk', ':sp<C-w>k<enter>:term<enter>a', {desc = 'Term upwards and move focus'})
-vim.keymap.set('n', '<leader>tj', ':sp<enter>:term<enter>a', {desc = 'Term to the bottom and move focus'})
-
-vim.keymap.set('n', '<leader>wl',  '<C-w>l', {desc = 'Split to the right'})
-vim.keymap.set('n', '<leader>wh',  '<C-w>h', {desc = 'Split to the left'})
-vim.keymap.set('n', '<leader>wk',  '<C-w>k', {desc = 'Split to the top'})
-vim.keymap.set('n', '<leader>wj',  '<C-w>j', {desc = 'Split to the bottom'})
-
-vim.keymap.set('n', '<leader>q', ':q<enter>', {desc = 'Quit the current window'})
-
--- Keymaps for navigating files
-vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, {desc = 'Open file picker'})
-vim.keymap.set('n', '<leader>fw', ":w<enter>", {desc = 'Save the current file'})
-
--- Keymaps for using git
-vim.keymap.set('n', '<leader>gc', require('telescope.builtin').git_commits, {desc = 'show the git commit history'})
-vim.keymap.set('n', '<leader>gbc', require('telescope.builtin').git_bcommits, {desc = 'show the git commit history for the current file'})
-vim.keymap.set('n', '<leader>ss', require('telescope.builtin').git_status, {desc = 'show the current git [s]tatu[s]'})
-vim.keymap.set('n', '<leader>sh', require('telescope.builtin').git_stash, {desc = 'show the current git stash'})
-
-
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands
 
@@ -938,3 +905,31 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- Varun's customized keymaps
+vim.keymap.set('n', '<leader>sl', ':vsp<enter>', {desc = 'Split to the right and move focus'})
+vim.keymap.set('n', '<leader>sh', ':vsp<enter><C-w>h', {desc = 'Split to the left and move focus'})
+vim.keymap.set('n', '<leader>sk', ':sp<C-w>k<enter>', {desc = 'Split upwards and move focus'})
+vim.keymap.set('n', '<leader>sj', ':sp<enter>', {desc = 'Split to the bottom and move focus'})
+
+vim.keymap.set('n', '<leader>tl', ':vsp<enter>:term<enter>a', {desc = 'Term to the right and move focus'})
+vim.keymap.set('n', '<leader>th', ':vsp<enter><C-w>h:term<enter>a', {desc = 'Term to the left and move focus'})
+vim.keymap.set('n', '<leader>tk', ':sp<C-w>k<enter>:term<enter>a', {desc = 'Term upwards and move focus'})
+vim.keymap.set('n', '<leader>tj', ':sp<enter>:term<enter>a', {desc = 'Term to the bottom and move focus'})
+
+vim.keymap.set('n', '<leader>wl',  '<C-w>l', {desc = 'Split to the right'})
+vim.keymap.set('n', '<leader>wh',  '<C-w>h', {desc = 'Split to the left'})
+vim.keymap.set('n', '<leader>wk',  '<C-w>k', {desc = 'Split to the top'})
+vim.keymap.set('n', '<leader>wj',  '<C-w>j', {desc = 'Split to the bottom'})
+
+vim.keymap.set('n', '<leader>q', ':q<enter>', {desc = 'Quit the current window'})
+
+-- Keymaps for navigating files
+vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, {desc = 'Open file picker'})
+vim.keymap.set('n', '<leader>fw', ":w<enter>", {desc = 'Save the current file'})
+
+-- Keymaps for using git
+vim.keymap.set('n', '<leader>gc', require('telescope.builtin').git_commits, {desc = 'show the git commit history'})
+vim.keymap.set('n', '<leader>gbc', require('telescope.builtin').git_bcommits, {desc = 'show the git commit history for the current file'})
+vim.keymap.set('n', '<leader>ss', require('telescope.builtin').git_status, {desc = 'show the current git [s]tatu[s]'})
+vim.keymap.set('n', '<leader>sh', require('telescope.builtin').git_stash, {desc = 'show the current git stash'})
