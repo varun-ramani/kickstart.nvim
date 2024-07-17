@@ -302,6 +302,26 @@ require('lazy').setup({
   -- you do for a plugin at the top level, you can do for a dependency.
   --
   -- Use the `dependencies` key to specify the dependencies of a particular plugin
+  -- {
+  --   'nvim-tree/nvim-tree.lua',
+  --   dependencies = {
+  --     { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+  --   },
+  --   config = function()
+  --     vim.g.loaded_netrw = 1
+  --     vim.g.loaded_netrwPlugin = 1
+  --     vim.opt.termguicolors = true
+  --
+  --     require('nvim-tree').setup {
+  --       hijack_netrw = true,
+  --       hijack_cursor = true,
+  --       update_focused_file = {
+  --         enable = true,
+  --         update_cwd = false
+  --       }
+  --     }
+  --   end
+  -- },
 
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
@@ -721,7 +741,7 @@ require('lazy').setup({
           -- Accept ([y]es) the completion.
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
-          ['<Tab>'] = cmp.mapping.confirm { select = true },
+          ['<enter>'] = cmp.mapping.confirm { select = true },
 
           -- If you prefer more traditional completion keymaps,
           -- you can uncomment the following lines
@@ -763,27 +783,6 @@ require('lazy').setup({
         },
       }
     end,
-  },
-
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'varun-ramani/duokai.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'duokai'
-
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
-    end,
-    dependencies = {
-      'rktjmp/lush.nvim'
-    }
   },
 
   -- Highlight todo, notes, etc in comments
@@ -871,8 +870,8 @@ require('lazy').setup({
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -927,6 +926,11 @@ vim.keymap.set('n', '<leader>q', ':q<enter>', {desc = 'Quit the current window'}
 -- Keymaps for navigating files
 vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, {desc = 'Open file picker'})
 vim.keymap.set('n', '<leader>fw', ":w<enter>", {desc = 'Save the current file'})
+vim.keymap.set('n', '<leader>ft', ":Neotree toggle<enter>", {desc = "Toggle Neotree"})
+
+--- Keymaps for editing text
+vim.keymap.set('i', '<M-BS>', '<C-w>', {desc = 'Delete previous word'})
+vim.keymap.set('v', '<M-Q>', 'gq', {desc = 'Rewrap selection'})
 
 -- Keymaps for using git
 vim.keymap.set('n', '<leader>gc', require('telescope.builtin').git_commits, {desc = 'show the git commit history'})
